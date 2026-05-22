@@ -69,11 +69,7 @@ async def analyze_journal_entry(
     messages = [
         {
             "role": "system",
-            "content": (
-                "You analyze journal entries. "
-                "Return ONLY valid JSON with keys: "
-                "sentiment, summary, topics."
-            ),
+            "content": "You are a helpful assistant that analyzes journal entries.",
         },
         {
             "role": "user",
@@ -82,11 +78,13 @@ async def analyze_journal_entry(
     ]
 
     response = await client.chat.completions.create(
-        model=get_settings().openai_model,
-        messages=messages,
+        model=get_settings().openai_model, messages=messages
     )
 
     content = response.choices[0].message.content
+
+    if content is None:
+        raise ValueError("LLM returned empty response")
 
     data = json.loads(content)
 
