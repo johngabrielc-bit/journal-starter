@@ -93,11 +93,13 @@ async def update_entry(
     empty strings and 300-character bodies — see ``TestUpdateEntry`` in
     tests/test_api.py.
     """
-    result = await entry_service.update_entry(entry_id, entry_update)
-    if not result:
-        raise HTTPException(status_code=404, detail="Entry not found")
+    entry = await entry_service.get_entry(entry_id)
 
-    return result
+    if entry is None:
+        raise HTTPException(status_code=404, detail="Entry not found")
+    update_data = entry_update.model_dump(exclude_unset=True)
+
+    return await entry_service.update_entry(entry_id, update_data)
 
 
 # TODO: Implement DELETE /entries/{entry_id} endpoint to remove a specific entry
