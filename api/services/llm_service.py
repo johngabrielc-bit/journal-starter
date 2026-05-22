@@ -69,7 +69,11 @@ async def analyze_journal_entry(
     messages = [
         {
             "role": "system",
-            "content": "You are a journal analysis assistant.",
+            "content": (
+                "You analyze journal entries. "
+                "Return ONLY valid JSON with keys: "
+                "sentiment, summary, topics."
+            ),
         },
         {
             "role": "user",
