@@ -590,3 +590,4 @@ This is how open-source contributors keep their fork up to date. It's more invol
 MIT License - see [LICENSE](LICENSE) for details.
 
 Contributions welcome! [Open an issue](https://github.com/learntocloud/journal-starter/issues) to get started.
+trigger ci
