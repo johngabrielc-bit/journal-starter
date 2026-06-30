@@ -72,12 +72,29 @@ async def analyze_journal_entry(
 
     messages: list[ChatCompletionSystemMessageParam | ChatCompletionUserMessageParam] = [
         ChatCompletionSystemMessageParam(
-            role="system", content="You are a helpful assistant that analyzes journal entries."
+            role="system",
+            content="""
+            You are a journal analysis assistant.
+
+            Return the result as valid JSON.
+
+            Format:
+
+            {
+            "sentiment": "positive",
+            "summary": "brief summary",
+            "topics": ["topic1", "topic2"]
+            }
+
+            Return JSON only.
+            """,
         ),
         ChatCompletionUserMessageParam(role="user", content=entry_text),
     ]
     response = await client.chat.completions.create(
-        model=get_settings().openai_model, messages=messages
+        model=get_settings().openai_model,
+        messages=messages,
+        response_format={"type": "json_object"},
     )
 
     content = response.choices[0].message.content
